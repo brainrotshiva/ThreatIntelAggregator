@@ -51,6 +51,32 @@ threatintel --hash abc123def456abc123def456abc123def456abc123def456
 
 All keys are **free tier** — no credit card needed.
 
+### How to Get & Add API Keys (One Time Only)
+
+Run the setup wizard once — keys are saved to `~/.threatintel.conf` and auto-loaded every scan:
+
+```bash
+threatintel --setup
+```
+
+It will ask you for each key one by one:
+
+```
+  VirusTotal  → virustotal.com → Profile → API Key
+  VT Key: paste_here
+
+  AbuseIPDB   → abuseipdb.com → Account → API
+  AbuseIPDB Key: paste_here
+
+  AlienVault OTX → otx.alienvault.com → Settings → API Key
+  OTX Key: paste_here
+
+  ✓ Keys saved to ~/.threatintel.conf
+  Now just run: threatintel 8.8.8.8
+```
+
+From then on, just run `threatintel 8.8.8.8` — keys load automatically. No flags needed ever again.
+
 ---
 
 ## 🚀 Usage
@@ -172,10 +198,10 @@ threatintel.py
 ## 👤 Author
 
 **Badam Shiva Sai**  
-Cybersecurity Researcher 
+Cybersecurity Researcher | CEH (In Progress)  
 📍 Hyderabad, India
 
-- GitHub: [@Brainrotshiva](https://github.com/brainrotshiva)
+- GitHub: [@Brainrotshiva](https://github.com/Brainrotshiva)
 - LinkedIn: [Badam Shiva Sai](https://linkedin.com/in/shiva-sai-badam)
 
 ---
