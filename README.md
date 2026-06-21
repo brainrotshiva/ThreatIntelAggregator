@@ -1,230 +1,190 @@
-# 🔍 Threat Intel Aggregator
+# 🛡️ Threat Intel Aggregator v1.0
 
-> Multi-source threat intelligence tool for SOC analysts and security researchers.  
-> Queries **VirusTotal**, **AbuseIPDB**, **Shodan**, and **AlienVault OTX** to produce a unified threat report for any IP or domain.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.8+-blue?style=flat-square&logo=python"/>
+  <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square"/>
+  <img src="https://img.shields.io/badge/Made%20in-India-orange?style=flat-square"/>
+  <img src="https://img.shields.io/badge/For-Ethical%20Use%20Only-red?style=flat-square"/>
+</p>
 
-**Author:** Badam Shiva Sai | [GitHub](https://github.com/Brainrotshiva) | [LinkedIn](https://linkedin.com/in/shiva-sai-badam)
-
----
-
-## 📸 Demo
-
-```
-╭──────────────────────────────────────────────────╮
-│ Threat Intel Aggregator v1.0                     │
-│ VirusTotal • AbuseIPDB • Shodan • AlienVault OTX │
-│ By Badam Shiva Sai | github.com/Brainrotshiva    │
-╰──────────────────────────────────────────────────╯
-
-Target: 45.33.32.156
-Scan Time: 2026-06-15 10:22:04
-Threat Score: 62/100 — MEDIUM THREAT
-
-                  VirusTotal
-  Metric              Value
- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  Malicious Engines   8
-  Suspicious          2
-  Harmless            62
-  Total Engines       72
-
-                  AbuseIPDB
-  Metric              Value
- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  Abuse Confidence    61%
-  Total Reports       142
-  Country             US
-  ISP                 Linode LLC
-  Last Reported       2026-06-14T08:11:00+00:00
-```
+> Instantly analyze IPs, domains, and file hashes for threats — geolocation, open ports, CVEs, TOR detection, DNS blacklists, and more. Works out of the box with zero API keys. Add optional keys for deeper intelligence.
 
 ---
 
-## ⚙️ Features
-
-- **Multi-source correlation** — queries 4 threat intel platforms in one run
-- **Composite threat score** — 0–100 score calculated from all sources combined
-- **Color-coded terminal output** — green (clean), yellow (low), orange (medium), red (high)
-- **Graceful degradation** — skips sources with no API key, runs on whatever keys you have
-- **JSON report export** — saves full scan results per target for documentation
-- **Supports IPs and domains** — auto-detects input type and queries the right endpoints
-
----
-
-## 🧰 Tech Stack
-
-- Python 3
-- [Requests](https://pypi.org/project/requests/) — API calls
-- [Rich](https://github.com/Textualize/rich) — terminal formatting
-- VirusTotal API v3
-- AbuseIPDB API v2
-- Shodan REST API
-- AlienVault OTX API v1
-
----
-
-## 🚀 Installation
-
-**Clone the repo:**
-```bash
-git clone https://github.com/Brainrotshiva/ThreatIntelAggregator
-cd ThreatIntelAggregator
-```
-
-**Install dependencies (Kali Linux / Debian):**
-```bash
-sudo apt install python3-requests -y
-pip install rich --break-system-packages
-```
-
-**Or via pip:**
-```bash
-pip install requests rich --break-system-packages
-```
-
----
-
-## 🔑 API Keys Setup
-
-All four APIs are **free to sign up**. Get your keys here:
-
-| Source | Sign Up | Free Tier |
-|--------|---------|-----------|
-| VirusTotal | [virustotal.com](https://www.virustotal.com/gui/sign-in) | 4 requests/min |
-| AbuseIPDB | [abuseipdb.com](https://www.abuseipdb.com/register) | 1000 checks/day |
-| Shodan | [account.shodan.io](https://account.shodan.io) | 1 query/sec |
-| AlienVault OTX | [otx.alienvault.com](https://otx.alienvault.com) | Unlimited |
-
-**Option 1 — Edit the script directly:**
-
-Open `threat_intel.py` and replace the placeholders in the `API_KEYS` section:
-
-```python
-API_KEYS = {
-    "virustotal": "YOUR_VT_KEY_HERE",
-    "abuseipdb":  "YOUR_ABUSEIPDB_KEY_HERE",
-    "shodan":     "YOUR_SHODAN_KEY_HERE",
-    "otx":        "YOUR_OTX_KEY_HERE",
-}
-```
-
-**Option 2 — Environment variables (recommended):**
+## ⚡ Quick Start
 
 ```bash
-export VT_API_KEY="your_key_here"
-export ABUSE_API_KEY="your_key_here"
-export SHODAN_API_KEY="your_key_here"
-export OTX_API_KEY="your_key_here"
+git clone https://github.com/Brainrotshiva/threat-intel-aggregator
+cd threat-intel-aggregator
+
+# Install globally (run from anywhere)
+sudo cp threatintel.py /usr/local/bin/threatintel
+sudo chmod +x /usr/local/bin/threatintel
 ```
 
-> The tool automatically skips any source with no key configured — you can start with just one key and add the rest later.
+Now run from anywhere:
 
----
-
-## 🖥️ Usage
-
-**Interactive mode:**
 ```bash
-python3 threat_intel.py
+threatintel 8.8.8.8
+threatintel google.com
+threatintel --hash abc123def456abc123def456abc123def456abc123def456
 ```
 
-**Pass target directly:**
+---
+
+## 🔍 What It Analyzes
+
+### Without API Keys (Zero Setup)
+| Source | Data |
+|---|---|
+| ip-api.com | Country, city, ISP, ASN, coordinates |
+| Shodan InternetDB | Open ports, CVEs, hostnames, tags |
+| TorProject | TOR exit node detection |
+| DNS Blacklists | Spamhaus, SpamCop, SORBS, Barracuda |
+
+### With Optional API Keys (Deeper Intel)
+| Source | Data | Get Key |
+|---|---|---|
+| VirusTotal | Malware scan across 70+ engines | virustotal.com |
+| AbuseIPDB | Abuse confidence score (0–100) | abuseipdb.com |
+| AlienVault OTX | Threat pulse count | otx.alienvault.com |
+
+All keys are **free tier** — no credit card needed.
+
+---
+
+## 🚀 Usage
+
 ```bash
-python3 threat_intel.py 8.8.8.8
-python3 threat_intel.py malicious-domain.com
-```
+# Scan an IP
+threatintel 8.8.8.8
 
-**Save JSON report:**
+# Scan a domain
+threatintel google.com
 
-At the end of each scan, you'll be prompted:
-```
-Save report to JSON? (y/n): y
-✔ Report saved: report_8_8_8_8_20260615_102204.json
-```
+# Scan a file hash (MD5 / SHA1 / SHA256)
+threatintel --hash abc123def456abc123def456abc123def456abc123def456
 
----
+# With optional API keys
+threatintel 1.2.3.4 --vt-key YOUR_KEY --abuse-key YOUR_KEY --otx-key YOUR_KEY
 
-## 📊 Threat Score Logic
+# Save HTML report
+threatintel 1.2.3.4 --output report.html
 
-The composite score (0–100) is calculated from all available sources:
+# Export as JSON
+threatintel 1.2.3.4 --json results.json
 
-| Source | Weight | Basis |
-|--------|--------|-------|
-| VirusTotal | 40 pts | % of engines flagging as malicious |
-| AbuseIPDB | 40 pts | Abuse confidence score |
-| AlienVault OTX | 20 pts | Number of threat pulses (capped at 10) |
-
-| Score Range | Label |
-|-------------|-------|
-| 0 | Clean / Unknown |
-| 1–39 | Low Threat |
-| 40–69 | Medium Threat |
-| 70–100 | High Threat |
-
----
-
-## 📁 Output Example (JSON)
-
-```json
-{
-  "target": "45.33.32.156",
-  "scan_time": "2026-06-15T10:22:04",
-  "threat_score": 62,
-  "threat_label": "MEDIUM THREAT",
-  "virustotal": {
-    "status": "ok",
-    "malicious": 8,
-    "suspicious": 2,
-    "harmless": 62,
-    "total": 72
-  },
-  "abuseipdb": {
-    "status": "ok",
-    "abuse_score": 61,
-    "country": "US",
-    "isp": "Linode LLC",
-    "total_reports": 142
-  },
-  "shodan": {
-    "status": "ok",
-    "open_ports": [22, 80, 443],
-    "vulns": ["CVE-2021-44228"],
-    "org": "Linode"
-  },
-  "otx": {
-    "status": "ok",
-    "pulse_count": 5,
-    "reputation": -1
-  }
-}
+# Skip HTML report
+threatintel 1.2.3.4 --no-report
 ```
 
 ---
 
-## 🛡️ Use Cases
+## 📊 Sample Output
 
-- **SOC Analysts** — quick IOC triage during incident investigation
-- **Threat Hunters** — correlate IPs and domains across multiple intel feeds
-- **Penetration Testers** — passive recon on target infrastructure
-- **Security Students** — hands-on threat intelligence workflow practice
+```
+╔══════════════════════════════════════════════════════╗
+║  🛡️  Threat Intel Aggregator v1.0                    ║
+║  by Brainrotshiva — github.com/Brainrotshiva          ║
+╚══════════════════════════════════════════════════════╝
+
+  ✓ Geolocation
+  ✓ Shodan InternetDB
+  ✓ TOR check
+  ✓ DNS blacklists
+
+──────────── TARGET ────────────
+  Target                 1.2.3.4
+  Type                   IP
+  Scan Time              2025-06-11 14:30:00
+
+────────── THREAT ASSESSMENT ──────────
+  Threat Score           75/100  ████████░░
+  Threat Level           CRITICAL
+
+────────── GEOLOCATION ──────────
+  IP                     1.2.3.4
+  Country                Russia (RU)
+  City                   Moscow
+  ISP                    AS12345 SomeISP
+  ASN                    AS12345
+
+────────── FLAGS ──────────
+  ● TOR Exit Node
+  ● Datacenter / Hosting
+
+────────── OPEN PORTS ──────────
+  22  80  443  3389  8080
+
+────────── VULNERABILITIES ──────────
+  ● CVE-2021-44228
+  ● CVE-2022-26134
+
+────────── REPUTATION ──────────
+  VirusTotal             42/72 engines flagged
+  AbuseIPDB Score        98/100
+  OTX Pulses             14
+  DNS Blacklists         zen.spamhaus.org, bl.spamcop.net
+```
 
 ---
 
-## ⚠️ Disclaimer
+## 🏗️ Architecture
 
-This tool is intended for **educational and authorized security research purposes only**.  
-Do not use against systems or targets without explicit permission.  
-The author is not responsible for any misuse of this tool.
+```
+threatintel.py
+├── Free Sources (no key)
+│   ├── fetch_ipapi()          # Geolocation, proxy, datacenter detection
+│   ├── fetch_shodan()         # Open ports, CVEs, hostnames
+│   ├── fetch_tor()            # TOR exit node check
+│   └── fetch_dns_blacklist()  # 4 major DNSBL checks
+│
+├── Optional Sources (with key)
+│   ├── fetch_vt_ip/domain/hash()  # VirusTotal
+│   ├── fetch_abuse()              # AbuseIPDB
+│   └── fetch_otx()                # AlienVault OTX
+│
+├── threat_score               # Composite 0–100 score
+├── print_report()             # Rich terminal output
+└── generate_html()            # Dark-theme HTML report
+```
+
+---
+
+## 📁 Output Files
+
+| File | Description |
+|---|---|
+| `threat_report.html` | Visual HTML report (open in browser) |
+| `results.json` | Machine-readable findings (optional) |
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] v1.1 — Bulk scan from file (list of IPs)
+- [ ] v1.2 — Slack/webhook alerts
+- [ ] v1.3 — Live dashboard (WebSocket)
+- [ ] v2.0 — Full web UI
+
+---
+
+## 👤 Author
+
+**Badam Shiva Sai**  
+Cybersecurity Researcher 
+📍 Hyderabad, India
+
+- GitHub: [@Brainrotshiva](https://github.com/brainrotshiva)
+- LinkedIn: [Badam Shiva Sai](https://linkedin.com/in/shiva-sai-badam)
 
 ---
 
 ## 📜 License
 
-MIT License — free to use, modify, and distribute with attribution.
+MIT License — free to use, modify, and distribute.  
+If you find it useful, drop a ⭐
 
 ---
 
-## 🔗 Related Projects
-
-- [GitSecScan](https://github.com/Brainrotshiva/GitSecScan) — GitHub Secret Leakage Scanner
-- [MNet v2.0](https://github.com/Brainrotshiva/Mnet) — Advanced Network Scanner
+*For ethical use only. Built to make threat intelligence accessible to everyone.*
